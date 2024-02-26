@@ -19,7 +19,10 @@ class AndroidTextView(
 
     init {
         myNativeView = TextView(context)
-        myNativeView.text = "我是来自 Android 的原生 TextView"
+        params["textSize"]?.let {
+            myNativeView.textSize = (it as Double).toFloat()
+        }
+        myNativeView.text = params["text"] as String?
     }
 
     override fun getView(): View {

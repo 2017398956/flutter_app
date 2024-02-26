@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/native_view/MyTextView.dart';
 import 'package:flutter_pickers/pickers.dart';
 import 'package:flutter_pickers/time_picker/model/date_mode.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NewRoute extends StatefulWidget {
@@ -35,14 +37,7 @@ class _NewRouteState extends State<NewRoute> {
             dateString,
             style: const TextStyle(fontSize: 14),
           ),
-          const SizedBox(
-            height: 50,
-            child: AndroidView(
-              viewType: "nflAndroidTextView",
-              creationParams: {"text": "=========="},
-              creationParamsCodec: StandardMessageCodec(),
-            ),
-          ),
+          const MyTextView(text: "我是来自 Android 的原生 TextView",),
           FilledButton(
               onPressed: () {
                 Pickers.showDatePicker(context, mode: DateMode.YMDHM,

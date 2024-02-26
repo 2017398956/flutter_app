@@ -13,7 +13,7 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         BatteryChannel(flutterEngine.dartExecutor.binaryMessenger, context) // 实例化通道
         flutterEngine.platformViewsController.registry.registerViewFactory(
-            "nflAndroidTextView",
+            "personal.nfl.flutter.view/AndroidTextView",
             MyViewFactory(StandardMessageCodec())
         ).let {
             Log.d("MainActivity", "registerViewFactory result:$it")

@@ -9,8 +9,9 @@ import io.flutter.plugin.platform.PlatformViewFactory
 
 class MyViewFactory(createArgsCodec: MessageCodec<Any>?) : PlatformViewFactory(createArgsCodec) {
     override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
+//        Log.d(TAG, "args:$args")
         val params = args as Map<String, Any>
-        Log.d(TAG, "params:$params and createArgsCodec:$createArgsCodec")
+        Log.d(TAG, "params:$args and createArgsCodec:$createArgsCodec")
         return AndroidTextView(context, createArgsCodec, viewId, params)
     }
 
