@@ -1,4 +1,5 @@
 /// name : ""
+library;
 
 class Student {
   Student({

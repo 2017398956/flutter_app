@@ -1,4 +1,5 @@
 /// name : "LiLei"
+library;
 
 class Person {
   Person({

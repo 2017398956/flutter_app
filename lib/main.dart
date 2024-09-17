@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/NewPage.dart';
-import 'package:flutter_app/pages/NewRoute.dart';
+import 'package:flutter_app/pages/DateSelectorCameraAndAndroidView.dart';
 import 'package:flutter_app/pages/VideoPlayerPage.dart';
 import 'package:flutter_app/pages/WebViewPage.dart';
 import 'package:flutter_app/utils/BatteryChannel.dart';
@@ -25,13 +25,26 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      routes: {
+        // 添加路由表信息
+        "newPage": (context) => const NewPage()
+      },
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(builder: (builder) {
+          // 不在上面路由表中的命名路由跳转会进入这个方法，在这里可以对用户是否登录或是否有权限进行判断
+          log("onGenerateRoute: ${settings.name}");
+          if (settings.name == "testPage") {
+            return const DateSelectorCameraAndAndroidView();
+          } else {
+            return const Text("This is not a valid page.");
+          }
+        });
+      },
       home: const MyHomePage(title: 'Home'),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -101,25 +114,36 @@ class _MyHomePageState extends State<MyHomePage> {
                               context,
                               MaterialPageRoute<String>(
                                   builder: (context) {
-                                    return NewPage();
+                                    return const NewPage();
                                   },
                                   fullscreenDialog: true))
-                          .then(
-                              (value) => {log("push callback value:${value}")})
+                          .then((value) => {log("push callback value:$value")})
                           .catchError(
                               (onError) => {log('push failed: $onError')})
                     },
-                    child: Text(
-                      "打开下一个页面",
-                      style: TextStyle(
-                          height: 2.test, backgroundColor: Colors.amberAccent),
+                    child: Row(
+                      children: [
+                        Text(
+                          "打开下一个页面",
+                          style: TextStyle(
+                              height: 2.test,
+                              backgroundColor: Colors.amberAccent),
+                        ),
+                        const Image(image: AssetImage("assets/img_test.jpg"))
+                      ],
                     ),
                   );
                   break;
                 case 1:
-                  children = const Text(
-                    "datadatadatadatadatadatadatadatadatadatadata",
-                    style: TextStyle(height: 15, backgroundColor: Colors.blue),
+                  children = GestureDetector(
+                    onTap: () => {
+                      Navigator.pushNamed(context, "testPage", arguments: "")
+                    },
+                    child: const Text(
+                      "datadatadatadatadatadatadatadatadatadatadata",
+                      style:
+                          TextStyle(height: 15, backgroundColor: Colors.blue),
+                    ),
                   );
                   break;
                 case 2:
@@ -139,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () {
                       // 自定义转场动画
                       MyPageRouteUtil.rightInAndLeftOut(
-                          context, const NewRoute());
+                          context, const DateSelectorCameraAndAndroidView());
                     },
                   );
                   break;

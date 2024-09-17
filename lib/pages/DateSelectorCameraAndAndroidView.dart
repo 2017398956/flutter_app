@@ -2,15 +2,13 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_app/native_view/MyTextView.dart';
 import 'package:flutter_pickers/pickers.dart';
 import 'package:flutter_pickers/time_picker/model/date_mode.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class NewRoute extends StatefulWidget {
-  const NewRoute({super.key});
+class DateSelectorCameraAndAndroidView extends StatefulWidget {
+  const DateSelectorCameraAndAndroidView({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -18,7 +16,7 @@ class NewRoute extends StatefulWidget {
   }
 }
 
-class _NewRouteState extends State<NewRoute> {
+class _NewRouteState extends State<DateSelectorCameraAndAndroidView> {
   String dateString = '';
   CameraController? cameraController;
   Future<void>? initializeControllerFuture;

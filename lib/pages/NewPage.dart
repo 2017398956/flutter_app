@@ -1,13 +1,15 @@
-import 'dart:math';
+
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/Person.dart';
 
+@immutable
 class NewPage extends StatelessWidget {
 
-  NewPage({super.key});
+  const NewPage({super.key, this.person});
 
-  Person? person;
+  final Person? person;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class NewPage extends StatelessWidget {
         child: PopScope(
           canPop: false,
           onPopInvoked: (pop) {
-            print('will pop : $pop');
+            log('will pop : $pop');
           },
           child: ElevatedButton(
             onPressed: () {
