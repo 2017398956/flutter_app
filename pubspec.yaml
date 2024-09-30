@@ -43,6 +43,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   video_player: ^2.8.2
   webview_flutter: ^4.4.4
+  fluttertoast: ^8.2.8
 
 # 强制依赖某个版本
 dependency_overrides:

@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/pages/AnimatedSwitcherDemo.dart';
 import 'package:flutter_app/pages/NewPage.dart';
 import 'package:flutter_app/pages/DateSelectorCameraAndAndroidView.dart';
+import 'package:flutter_app/pages/StaggerDemo.dart';
 import 'package:flutter_app/pages/VideoPlayerPage.dart';
 import 'package:flutter_app/pages/WebViewPage.dart';
 import 'package:flutter_app/utils/BatteryChannel.dart';
@@ -33,10 +35,23 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder: (builder) {
           // 不在上面路由表中的命名路由跳转会进入这个方法，在这里可以对用户是否登录或是否有权限进行判断
           log("onGenerateRoute: ${settings.name}");
-          if (settings.name == "testPage") {
-            return const DateSelectorCameraAndAndroidView();
-          } else {
-            return const Text("This is not a valid page.");
+          switch (settings.name) {
+            case "testPage":
+              {
+                return const DateSelectorCameraAndAndroidView();
+              }
+            case "StaggerDemo":
+              {
+                return const StaggerDemo();
+              }
+            case "AnimatedSwitcherDemo":
+              {
+                return const AnimatedSwitcherDemo();
+              }
+            default:
+              {
+                return const Text("This is not a valid page.");
+              }
           }
         });
       },
@@ -69,6 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+
+  void test() {}
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +234,30 @@ class _MyHomePageState extends State<MyHomePage> {
                 default:
                   children = Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Text("data $index"),
+                    child: GestureDetector(
+                      onTap: () {
+                        switch (index) {
+                          case 5:
+                            Navigator.pushNamed(context, "StaggerDemo");
+                            break;
+                          case 6:
+                            Navigator.pushNamed(
+                                context, "AnimatedSwitcherDemo");
+                            break;
+                        }
+                        log("data $index");
+                      },
+                      child: () {
+                        switch (index) {
+                          case 5:
+                            return const Text("StaggerAnimation");
+                          case 6:
+                            return const Text("AnimatedSwitcherDemo");
+                          default:
+                            return Text("data $index");
+                        }
+                      }(),
+                    ),
                   );
                   break;
               }
