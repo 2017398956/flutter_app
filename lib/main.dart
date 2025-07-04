@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Test.dart';
 import 'package:flutter_app/pages/AnimatedSwitcherDemo.dart';
 import 'package:flutter_app/pages/NewPage.dart';
 import 'package:flutter_app/pages/DateSelectorCameraAndAndroidView.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_app/pages/VideoPlayerPage.dart';
 import 'package:flutter_app/pages/WebViewPage.dart';
 import 'package:flutter_app/utils/BatteryChannel.dart';
 import 'package:flutter_app/utils/MyPageRouteUtil.dart';
+import 'Test.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +22,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    log("StatelessWidget#build()", name: "lifecycle");
+    testDart();
     WidgetsFlutterBinding.ensureInitialized();
     return MaterialApp(
       title: 'Flutter Demo',
@@ -70,14 +74,14 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+/// State 生命周期
+/// initState()：在第一次创建 widget 时调用，之后不再调用。
+/// didChangeDependencies()：在 widget 的依赖项发生变化时调用，例如：当父 widget 的某个值发生变化时。
+/// didUpdateWidget()：在 widget 的配置发生变化时调用，例如：当父 widget 的某个值发生变化时。
+/// deactivate()：当 widget 从树中移除时调用，之后 widget 可能会被重新插入到树中。
+/// dispose()：在 widget 被永久移除时调用，之后 widget 将不再被使用。
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    BatteryChannel.initChannels();
-  }
 
   void _incrementCounter() {
     setState(() {
@@ -88,7 +92,28 @@ class _MyHomePageState extends State<MyHomePage> {
   void test() {}
 
   @override
+  void initState() {
+    super.initState();
+    BatteryChannel.initChannels();
+    log("initState()", name: "lifecycle");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    log("didChangeDependencies()", name: "lifecycle");
+  }
+
+  /// State 第一次生成的时候不会调用，再次生成的时候会先于 build 方法执行
+  @override
+  void reassemble() {
+    super.reassemble();
+    log("reassemble()", name: "lifecycle");
+  }
+
+  @override
   Widget build(BuildContext context) {
+    log("State#build()", name: "lifecycle");
     BatteryChannel.getBatteryLevel()
         .then((value) => {log('Battery Level:$value')})
         .catchError((onError) {
@@ -273,6 +298,24 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  @override
+  void didUpdateWidget(covariant MyHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    log("didUpdateWidget()", name: "lifecycle");
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    log("deactivate()", name: "lifecycle");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    log("dispose()", name: "lifecycle");
   }
 }
 
