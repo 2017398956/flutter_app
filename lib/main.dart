@@ -1,19 +1,52 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Test.dart';
 import 'package:flutter_app/pages/AnimatedSwitcherDemo.dart';
-import 'package:flutter_app/pages/NewPage.dart';
 import 'package:flutter_app/pages/DateSelectorCameraAndAndroidView.dart';
+import 'package:flutter_app/pages/NewPage.dart';
 import 'package:flutter_app/pages/StaggerDemo.dart';
 import 'package:flutter_app/pages/VideoPlayerPage.dart';
 import 'package:flutter_app/pages/WebViewPage.dart';
 import 'package:flutter_app/utils/BatteryChannel.dart';
 import 'package:flutter_app/utils/MyPageRouteUtil.dart';
-import 'Test.dart';
+
+void collectLog(String line) {
+  //收集日志
+}
+
+void reportErrorAndLog(FlutterErrorDetails details) {
+  //上报错误和日志逻辑
+}
+
+FlutterErrorDetails? makeDetails(Object obj, StackTrace stack) {
+  // 构建错误信息
+  return null;
+}
 
 void main() {
-  runApp(const MyApp());
+  var onError = FlutterError.onError; //先将 onerror 保存起来
+  FlutterError.onError = (FlutterErrorDetails details) {
+    onError?.call(details); //调用默认的onError
+    reportErrorAndLog(details); //上报
+  };
+  runZoned(
+    () => runApp(const MyApp()),
+    zoneSpecification: ZoneSpecification(
+      // 拦截 print
+      print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+        collectLog(line);
+        parent.print(zone, "Interceptor: $line");
+      },
+      // 拦截未处理的异步错误
+      handleUncaughtError: (Zone self, ZoneDelegate parent, Zone zone,
+          Object error, StackTrace stackTrace) {
+        // reportErrorAndLog(details);
+        parent.print(zone, '${error.toString()} $stackTrace');
+      },
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,33 +64,39 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      // initialRoute:"main", //名为"/"的路由作为应用的home(首页)
       routes: {
         // 添加路由表信息
-        "newPage": (context) => const NewPage()
+        // "main": (context) => const MyApp(),
+        "newPage": (context) => const NewPage(),
+        // 如果 NewPage 中需要传递一个 text 参数，则在路由表中可以这样写
+        // "newPage": (context) => const NewPage(text: ModalRoute.of(context)!.settings.arguments),
       },
       onGenerateRoute: (settings) {
-        return MaterialPageRoute(builder: (builder) {
-          // 不在上面路由表中的命名路由跳转会进入这个方法，在这里可以对用户是否登录或是否有权限进行判断
-          log("onGenerateRoute: ${settings.name}");
-          switch (settings.name) {
-            case "testPage":
-              {
-                return const DateSelectorCameraAndAndroidView();
+        return MaterialPageRoute(
+            builder: (builder) {
+              // 不在上面路由表中的命名路由跳转会进入这个方法，在这里可以对用户是否登录或是否有权限进行判断
+              log("onGenerateRoute, name:${settings.name}, arguments:${settings.arguments}");
+              switch (settings.name) {
+                case "testPage":
+                  {
+                    return const DateSelectorCameraAndAndroidView();
+                  }
+                case "StaggerDemo":
+                  {
+                    return const StaggerDemo();
+                  }
+                case "AnimatedSwitcherDemo":
+                  {
+                    return const AnimatedSwitcherDemo();
+                  }
+                default:
+                  {
+                    return const Text("This is not a valid page.");
+                  }
               }
-            case "StaggerDemo":
-              {
-                return const StaggerDemo();
-              }
-            case "AnimatedSwitcherDemo":
-              {
-                return const AnimatedSwitcherDemo();
-              }
-            default:
-              {
-                return const Text("This is not a valid page.");
-              }
-          }
-        });
+            },
+            settings: settings);
       },
       home: const MyHomePage(title: 'Home'),
       debugShowCheckedModeBanner: false,
@@ -95,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     BatteryChannel.initChannels();
+    print("This is main page.");
     log("initState()", name: "lifecycle");
   }
 
@@ -171,15 +211,19 @@ class _MyHomePageState extends State<MyHomePage> {
                               height: 2.test,
                               backgroundColor: Colors.amberAccent),
                         ),
-                        const Image(image: AssetImage("assets/img_test.jpg"))
+                        const Image(image: AssetImage("assets/img_test.jpg")),
+                        Image.asset("images/thunder.png")
                       ],
                     ),
                   );
                   break;
                 case 1:
                   children = GestureDetector(
-                    onTap: () => {
-                      Navigator.pushNamed(context, "testPage", arguments: "")
+                    onTap: () async {
+                      var result = await Navigator.pushNamed(
+                          context, "testPage",
+                          arguments: "{testArguments:\"ok\"}");
+                      log("Next Page disposed return value:$result");
                     },
                     child: const Text(
                       "datadatadatadatadatadatadatadatadatadatadata",
@@ -269,6 +313,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.pushNamed(
                                 context, "AnimatedSwitcherDemo");
                             break;
+                          case 7:
+                            Scaffold.of(context).openDrawer();
+                          case 8:
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("SnackBar Test")));
+                            break;
                         }
                         log("data $index");
                       },
@@ -278,6 +328,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             return const Text("StaggerAnimation");
                           case 6:
                             return const Text("AnimatedSwitcherDemo");
+                          case 7:
+                            return const Text("OpenDrawer");
+                          case 8:
+                            return const Text("SnackBar");
                           default:
                             return Text("data $index");
                         }
@@ -297,6 +351,7 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
+      drawer: const Drawer(),
     );
   }
 

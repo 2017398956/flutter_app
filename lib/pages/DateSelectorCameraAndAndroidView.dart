@@ -23,6 +23,7 @@ class _NewRouteState extends State<DateSelectorCameraAndAndroidView> {
 
   @override
   Widget build(BuildContext context) {
+    log("receive arguments:${ModalRoute.of(context)?.settings.arguments}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
