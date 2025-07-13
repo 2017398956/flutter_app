@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/Test.dart';
 import 'package:flutter_app/pages/AnimatedSwitcherDemo.dart';
 import 'package:flutter_app/pages/DateSelectorCameraAndAndroidView.dart';
+import 'package:flutter_app/pages/MainDrawer.dart';
 import 'package:flutter_app/pages/NewPage.dart';
 import 'package:flutter_app/pages/StaggerDemo.dart';
 import 'package:flutter_app/pages/VideoPlayerPage.dart';
@@ -351,7 +352,7 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
-      drawer: const Drawer(),
+      drawer: const Drawer(child: MainDrawer()),
     );
   }
 
@@ -376,4 +377,5 @@ class _MyHomePageState extends State<MyHomePage> {
 
 extension ScreenSizeScaleUtil on int {
   double get test => this * 2;
+  double get dp => this * 2;
 }
