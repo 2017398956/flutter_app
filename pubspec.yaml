@@ -44,6 +44,7 @@ dependencies:
   video_player: ^2.8.2
   webview_flutter: ^4.4.4
   fluttertoast: ^8.2.8
+  flutter_spinkit: ^5.2.1
 
 # 强制依赖某个版本
 dependency_overrides:
