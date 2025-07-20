@@ -65,6 +65,15 @@ class _MyWidget extends AnimatedWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          actions: const [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.white70),
+              ),
+            )
+          ],
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text("data")),
       body: Center(

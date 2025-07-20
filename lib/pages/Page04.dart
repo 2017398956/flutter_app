@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../base/ViewUtil.dart';
@@ -7,7 +6,7 @@ class Page04 extends StatefulWidget {
   const Page04({super.key});
 
   @override
-  State<Page04> createState() => _Page04State();
+  State<Page04> createState() => _Page04_01_State();
 }
 
 class _Page04State extends State<Page04> {
@@ -72,6 +71,40 @@ class _Page04State extends State<Page04> {
               ),
             ),
           ],
+        ));
+  }
+}
+
+class _Page04_01_State extends State<Page04> {
+  static const redBox = DecoratedBox(
+    decoration: BoxDecoration(color: Colors.red),
+  );
+  static const redSizedBox = SizedBox(
+    width: 50,
+    height: 50,
+    child: redBox,
+  );
+  static const redText =
+      Text("This is a Text.", style: TextStyle(backgroundColor: Colors.red));
+
+  @override
+  Widget build(BuildContext context) {
+    return ViewUtil.createPageView(
+        context,
+        "title",
+        Container(
+          color: Colors.green,
+          child: Column(
+            children: [
+              Expanded(
+                  child: Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
+                color: Colors.yellowAccent,
+                child: const Expanded(child: redText),
+              ))
+            ],
+          ),
         ));
   }
 }
