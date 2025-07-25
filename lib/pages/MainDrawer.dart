@@ -4,6 +4,7 @@ import 'package:flutter_app/pages/Page03.dart';
 import 'package:flutter_app/utils/MyPageRouteUtil.dart';
 
 import 'Page04.dart';
+import 'Page05.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
@@ -26,6 +27,11 @@ class MainDrawer extends StatelessWidget {
               child: const Text("第四章 布局类组件"),
               onTap: () =>
                   {MyPageRouteUtil.rightInAndLeftOut(context, const Page04())},
+            ),
+            GestureDetector(
+              child: const Text("第五章 容器类组件"),
+              onTap: () =>
+              {MyPageRouteUtil.rightInAndLeftOut(context, const Page05())},
             ),
           ],
         ),
