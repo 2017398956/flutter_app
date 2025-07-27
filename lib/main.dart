@@ -122,10 +122,17 @@ class MyHomePage extends StatefulWidget {
 /// dispose()：在 widget 被永久移除时调用，之后 widget 将不再被使用。
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  int _selectedIndex = 1;
 
   void _incrementCounter() {
     setState(() {
       _counter++;
+    });
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
     });
   }
 
@@ -352,7 +359,30 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: const Drawer(child: MainDrawer()),
+      // bottomNavigationBar: BottomNavigationBar( // 底部导航
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.business), label: 'Business'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.school), label: 'School'),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   fixedColor: Colors.blue,
+      //   onTap: _onItemTapped,
+      // ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        shape: const CircularNotchedRectangle(), // 底部导航栏打一个圆形的洞
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(icon: const Icon(Icons.home), onPressed: () {  },),
+            const SizedBox(), //中间位置空出
+            IconButton(icon: const Icon(Icons.business), onPressed: () {  },),
+          ], //均分底部导航栏横向空间
+        ),
+      ),
     );
   }
 

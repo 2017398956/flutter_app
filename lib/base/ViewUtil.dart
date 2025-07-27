@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/widgets/SingleLineFittedBox.dart';
 
 class ViewUtil {
   static Widget createPageView(
@@ -6,7 +7,7 @@ class ViewUtil {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title ?? ""),
+        title: Center(child: Text(title ?? ""),),
       ),
       body: Container(
         color: Colors.green[100],

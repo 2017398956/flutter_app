@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/base/ViewUtil.dart';
+import 'package:flutter_app/widgets/SingleLineFittedBox.dart';
 
 class Page05 extends StatefulWidget {
   const Page05({super.key});
@@ -15,6 +16,29 @@ class Page05 extends StatefulWidget {
 }
 
 class Page05State extends State<Page05> {
+  Widget wContainer(BoxFit boxFit) {
+    return Container(
+      width: 50,
+      height: 50,
+      color: Colors.red,
+      child: FittedBox(
+        fit: boxFit,
+        // 子容器超过父容器大小
+        child: Container(width: 60, height: 70, color: Colors.blue),
+      ),
+    );
+  }
+
+  // 直接使用Row
+  Widget wRow(String text) {
+    Widget child = Text(text);
+    child = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [child, child, child],
+    );
+    return child;
+  }
+
   Widget? createWidgetByType(int type) {
     Widget? widget;
     switch (type) {
@@ -96,8 +120,8 @@ class Page05State extends State<Page05> {
         );
         break;
       case 6:
-        // RotatedBox 和 Transform.rotate 功能相似，它们都可以对子组件进行旋转变换，
-        // 但是有一点不同：RotatedBox 的变换是在 layout 阶段，会影响在子组件的位置和大小。
+      // RotatedBox 和 Transform.rotate 功能相似，它们都可以对子组件进行旋转变换，
+      // 但是有一点不同：RotatedBox 的变换是在 layout 阶段，会影响在子组件的位置和大小。
         widget = const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -117,7 +141,7 @@ class Page05State extends State<Page05> {
         );
         break;
       case 7:
-        // 头像
+      // 头像
         Widget avatar = Image.asset("images/thunder.png", width: 60.0);
         widget = Center(
           child: Column(
@@ -174,13 +198,49 @@ class Page05State extends State<Page05> {
           ),
         );
         break;
+      case 8:
+        widget = Center(
+          child: Column(
+            children: [
+              // 子 View 超出父 View 和下面的 Text 重合
+              wContainer(BoxFit.none),
+              const Text('Wendux'),
+              wContainer(BoxFit.contain),
+              const Text('Flutter中国'),
+              // 裁减掉超出父 View 的部分
+              ClipRect(child: wContainer(BoxFit.none),),
+              const Text('Wendux'),
+            ],
+          ),
+        );
+        break;
+      case 9:
+        widget = Center(
+          child: Column(
+            children: [
+              wRow(' 900000000000000000000000000000000 '),
+              FittedBox(child: wRow(' 90000000000000000 ')),
+              wRow(' 800 '),
+              FittedBox(child: wRow(' 800 ')),
+              SingleLineFittedBox(child: wRow(' 800 '),),
+              SingleLineFittedBox(child: wRow(' 900000000000000000000000000000000 '),),
+            ].map((e) =>
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: e,
+                ))
+                .toList(),
+          ),
+        );
+        break;
     }
     return widget;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ViewUtil.createPageView(context, "第五章 容器类组件", createWidgetByType(7));
+    return ViewUtil.createPageView(
+        context, "第五章 容器类组件", createWidgetByType(9));
   }
 }
 
@@ -203,18 +263,10 @@ class MyClipperPath extends CustomClipper<Path> {
     log("size width:${size.width},height:${size.height}");
     double w = size.width / 2;
     double h = size.height / 2;
-    // return Path()
-    //   ..lineTo(0, h)
-    //   ..moveTo(w, 0)
-    //   ..moveTo(2 * w, h)
-    //   ..moveTo(w, 2 * h)
-    //   ..close();
     Path path;
     path = Path()
-      ..lineTo(0, h)
-      ..moveTo(w, 0)
-      ..moveTo(2 * w, h)
-      ..moveTo(w, 2 * h)
+      ..moveTo(0, h)
+      ..lineTo(w, 0)..lineTo(2 * w, h)..lineTo(w, 2 * h)
       ..close();
     // path = Path()..addRect(const Rect.fromLTWH(10.0, 15.0, 40.0, 30.0));
     return path;
